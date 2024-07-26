@@ -1,0 +1,342 @@
+.gaist-client{
+    display: flex;
+    flex-direction: column;
+    // justify-content: space-between;
+    height: 100svh;
+    min-height: 100svh ;
+    max-height: 100svh;
+    .gaist-client-header{
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .gaist-client-header-info{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--aside-bg-color);
+            border-radius: 50px;
+            padding: 5px;
+            gap: 10px;
+            margin-top: 10px;
+        }
+    }
+    .gaist-client-dialog{
+        .placeholder{
+            height: calc(100svh - 120px - 1rem);
+            max-height: calc(100svh - 120px - 1rem);
+            width: calc(100%  );
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            overflow-y: auto;
+            position: relative;
+            scrollbar-color: transparent transparent;
+            @media screen and (max-width: 720px) {
+                padding: .5rem;;
+            }
+            // margin-left: -.5rem;
+        }
+        .gaist-client-message-box{
+            width: 100%;
+            margin-top: 1rem;
+            // border: 1px solid var(--border-primary);
+            // padding: 1rem;
+            display: flex;
+            align-items: flex-start;
+            .gaist-ai-message-cursor{
+                display: block;
+                width: 10px;
+                height: 10px;
+                background-color: #fff;
+                border-radius: 10px;
+            }
+            .gaist-client-message-box-left{
+                svg{
+                    color: var(--text-color);
+                }
+            }
+            .gaist-client-message-box-right{
+                margin-left: .5rem;
+                font-size: 1rem;
+                width: 100%;
+                pre{
+                    max-width: 100%;
+                    white-space: pre-wrap;       /* Since CSS 2.1 */
+                    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+                    white-space: -pre-wrap;      /* Opera 4-6 */
+                    white-space: -o-pre-wrap;    /* Opera 7 */
+                    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+                }
+            }
+            .gaist-client-message-box-error{
+                border: 1px solid rgba(255, 0, 0, 0.534);
+                background-color: #ff6a0034;
+                width: 100%;
+                padding: 5px;
+                color: #ff6c00;
+                font-style: italic;
+            }
+            .gaist-client-message-box-loading{
+                width: 100%;
+                border-radius: 5px;
+                margin-left: 0;
+                display: flex;
+                align-items: center;
+                padding: 5px;
+                height: fit-content;
+                font-size: .5rem;
+            }
+            // THE LOADING EFFECT
+            .skeleton {
+                background-color: var(--aside-bg-color);
+                // The shine that's going to move across the skeleton:
+                background-image:			
+                        linear-gradient(
+                            90deg, 
+                            rgba(#585858, 0), 
+                            rgba(#585858, 0.5),
+                            rgba(#585858, 0)
+                        );
+                background-size: 40px 100%; // width of the shine
+                background-repeat: no-repeat; // No need to repeat the shine effect
+                background-position: left -40px top 0; // Place shine on the left side, with offset on the left based on the width of the shine - see background-size
+                animation: shine 1s ease infinite; // increase animation time to see effect in 'slow-mo'
+            }
+
+            @keyframes shine {
+                to {
+                    // Move shine from left to right, with offset on the right based on the width of the shine - see background-size
+                    background-position: right -40px top 0;
+                }
+            }
+
+            .gaist-client-message-box-previews{
+                // background-color: var(--border-primary);
+                border-radius: 10px;
+                // padding: 5px;
+                margin-top: 10px;
+                display: flex;
+                flex: 1;
+                gap: 10px;
+                width: 100%;
+                margin-top: 1rem;
+                @media screen and (max-width: 720px) {
+                    flex-wrap: wrap;
+                }
+                
+                .gaist-client-message-box-preview{
+                    border: 1px solid var(--border-primary);
+                    cursor: pointer;
+                    max-width: 340px;
+                    width: 100%;
+                    height: auto;
+                    background-color: var(--bg-primary);
+                    padding: .5rem;
+                    font-size: .8rem;
+                    color: var(--text-grey);
+                    // background-color: antiquewhite;
+                    border-radius: 5px;
+                    overflow: hidden;
+                    max-height: auto;
+                    img{
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                }
+                .gaist-client-message-box-preview-text{
+                    min-height: max-content !important;
+                    font-size: .8rem;
+                    @media screen and (max-width: 720px) {
+                        aspect-ratio: unset !important;
+                        height: min-content;
+                    }
+                }
+            }
+            .gaist-message-box-previews-actions,.gaist-message-box-previews-actions-action{
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 6px;
+            }
+            .gaist-message-box-previews-actions{
+                gap: 15px;
+            }
+            .gaist-message-box-previews-actions-action-item{
+                display: flex;
+                align-items: center;
+                width: min-content;
+                max-width: min-content;
+                background-color: var(--border-primary);
+                margin-top: 6px;
+                padding: 0 5px;
+                border-radius: 5px;
+                font-weight: 600;
+                cursor: pointer;
+                svg{
+                    color: #fff;
+                }
+            }
+            .gaist-client-preview{
+                width: 100%;
+                min-width: 50px;
+                min-height: 100px;
+                background-color: aqua;
+                cursor: pointer;
+            }
+        }
+    }
+    .gaist-client-message{
+        display: flex;
+        flex-direction: row;
+        background-color: var(--border-primary);
+        border-radius: 25px;
+        align-items: flex-end;
+        padding: .5rem;
+        position: absolute;
+        bottom: 10px;
+        width: calc(100% );
+        @media screen and (max-width: 720px) {
+           max-width: calc(100% - 2rem);
+            left: 1rem;
+        }
+        @media screen and (max-width: 500px) {
+            max-width: calc(100% - 1rem);
+             left: .5rem;
+         }
+        .gaist-client-message-content{
+            width: 100%;
+            max-width: calc(100% - 55px);
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            .gaist-client-message-content-text{
+                width: 100%;
+                height: max-content;
+                min-height: 30px;
+                max-height: 200px;
+                overflow-y: auto;
+                background-color: transparent;
+                overflow-wrap: break-word;
+                border: none;
+                outline: none;
+                padding: 0 .5rem;
+                padding-left: 3px;;
+                font-size: .85rem;
+                color: var(--text-color);
+                padding-bottom: 2px;
+            }
+            .gaist-client-message-content-text.placeholder::before {
+                content: 'Ask assistant';
+                color: #b4b4b4;
+                pointer-events: none;
+                display: block; /* For Firefox */
+            }
+            // [contenteditable=true]:empty:before {
+            //     content: attr(placeholder);
+            //     color: #b4b4b4;
+            //     pointer-events: none;
+            //     display: block; /* For Firefox */
+            // }
+        }
+        .gaist-client-message-content-file{
+            width: 100%;
+            border-bottom: 1px solid #b4b4b4;
+            margin-bottom: .25rem;
+            padding-bottom: .25rem;
+            display: flex;
+            max-width: 100%;
+            overflow-x: auto;
+            gap: .5rem;
+            .gaist-assistant-preview-image-box{
+                width: 100px;
+                min-width: 100px;
+                height: 100px;
+                border-radius: 5px;
+                overflow: hidden;
+                position: relative;
+                .gaist-assistant-preview-image{
+                    object-fit: cover;
+                    width: 100%;
+                    height: 100%;
+                }
+                .gaist-assistant-remove-button{
+                    position: absolute;
+                    width: 25px;
+                    height: 25px;
+                    border-radius: 25px;
+                    border: none;
+                    outline: none;
+                    right: 0;
+                    font-weight: bold;
+                    cursor: pointer;
+                }
+            }
+        }
+        .gaist-client-message-btn-fill:disabled{
+            cursor: no-drop;
+            background-color: #676767;
+            svg{
+                color: #2f2f2f;
+            }
+        }
+        .gaist-client-message-btn:disabled{
+            cursor: no-drop;
+            svg{
+                color: #2f2f2f !important;
+                stroke: #2f2f2f !important;
+            }
+        }
+        
+        .gaist-client-message-btn-fill,.gaist-client-message-btn{
+           
+            height: 32px;
+            border-radius: 32px;    
+            // margin: .5rem;
+            background: transparent;
+            margin-left: 0; 
+            cursor: pointer;   
+            border: none;
+            outline: none;  
+            .messaging-btn{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                height: 100%;
+                svg{
+                    margin: auto;
+                }  
+            }
+        }
+        .gaist-client-message-btn-fill{
+            width: 32px;
+            min-width: 32px;
+            background-color: var(--bg-primary);
+            color: var(--text-color);
+        }
+        .gaist-client-message-btn{
+            position: relative;
+            overflow: hidden;
+            width: 22px;
+            min-width: 22px;
+            input{
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                max-width: 100%;
+                max-height: 100%;
+                // background-color: rebeccapurple;
+                opacity: 0;
+                cursor: pointer;
+            }
+            input:disabled{
+                cursor: no-drop;
+            }
+        }
+    }
+}
