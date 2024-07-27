@@ -38,7 +38,7 @@
   <p align="center">
     MGMclient is a client in ReactJS chat app that add function execution to generative model
     <br />
-    <a href="https://github.com/w4coder/MGMclient/blob/master/docs"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/w4coder/MGMclient/blob/master/docs.md"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/w4coder/MGMclient">View Demo</a>
@@ -163,7 +163,7 @@ _Below is an example of how you can instruct your audience on installing and set
     export const IMAGE_PROCESSING_ENDPOINT = "" //Your local running image processing model
    ```
 For more customisation look at the doc  
-<a href="https://github.com/w4coder/MGMclient/blob/master/docs">here</a>
+<a href="https://github.com/w4coder/MGMclient/blob/master/docs.md">here</a>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 

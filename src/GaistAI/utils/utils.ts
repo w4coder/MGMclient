@@ -80,7 +80,7 @@ export async function handleFunctionCallString(inputString:string,files:MessageF
 
 // Example function to handle function calls
 async function handleFunctionCall(name: string, params: any[],files:MessageFile[] | null, additionalMessage = '') {
-    console.log("files",files)
+    // console.log("files",files)
     switch (name) {
         case "resize_image":
             // Extract parameters
