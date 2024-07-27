@@ -13,12 +13,13 @@
         .gaist-client-header-info{
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
             background-color: var(--aside-bg-color);
             border-radius: 50px;
             padding: 5px;
             gap: 10px;
             margin-top: 10px;
+            min-width: 150px;
         }
     }
     .gaist-client-dialog{
@@ -35,6 +36,7 @@
             scrollbar-color: transparent transparent;
             @media screen and (max-width: 720px) {
                 padding: .5rem;;
+                padding-right: calc(18px + .8rem);
             }
             // margin-left: -.5rem;
         }
@@ -59,7 +61,7 @@
             }
             .gaist-client-message-box-right{
                 margin-left: .5rem;
-                font-size: 1rem;
+                font-size: 1.15rem;
                 width: 100%;
                 pre{
                     max-width: 100%;
@@ -148,7 +150,7 @@
                 }
                 .gaist-client-message-box-preview-text{
                     min-height: max-content !important;
-                    font-size: .8rem;
+                    font-size: .95rem;
                     @media screen and (max-width: 720px) {
                         aspect-ratio: unset !important;
                         height: min-content;
@@ -224,9 +226,9 @@
                 outline: none;
                 padding: 0 .5rem;
                 padding-left: 3px;;
-                font-size: .85rem;
+                font-size: 1rem;
                 color: var(--text-color);
-                padding-bottom: 2px;
+                padding-bottom: 0;
             }
             .gaist-client-message-content-text.placeholder::before {
                 content: 'Ask assistant';

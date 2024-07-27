@@ -59,7 +59,7 @@ export function ImageBasedAction({action,idx,runAction,handleUseImage}:ActionPro
                     action.function && runAction(action.function)
                 }}
             >
-                {(action.file && action.file.type == "image") && (
+                {(action.file && action.type == "image") && (
                     <img src={action.file.content}/>
                 )}
             </div>

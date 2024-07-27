@@ -1,6 +1,7 @@
 import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
 import { MessageFile } from "../components/gaist-ai-comp";
+import { IMAGE_PROCESSING_ENDPOINT } from "@/constants";
 
 async function filesanitizer(file?: File | string | null) {
     if(file){
@@ -20,49 +21,60 @@ export async function handleFunctionCallString(inputString:string,files:MessageF
     // Extract the JSON part of the string
     // Clean and format the string to JSON
     var cleanedInput = inputString?.split("\n")?.join(' ')?.toString()
-    console.log(cleanedInput)
+    // console.log("Run function step 0",cleanedInput)
     var jsonObject = null
+    var jsonString = null
+    var additionalMessage = null;
     if(cleanedInput?.startsWith("```json")){
         jsonObject = cleanedInput.match(/```json\s*({[\s\S]*?})\s*```(.*)/s);
-    }
-    if(cleanedInput?.startsWith("{")){
-        jsonObject = cleanedInput.match(/({[\s\S]*?})/);
-    }
-
-    if(jsonObject){
-        if(jsonObject?.length>=2){
-            var jsonString = jsonObject[1]
-            var additionalMessage = jsonObject[2]?.trim();
-            if(jsonString){
-                try{
-                    const functionObject = JSON.parse(jsonString) as {
-                        call_function : {
-                            name : string,
-                            params : {
-                                name: string,
-                                value: any
-                            }[]
-                        },
-                        extra_message: string
-                    }
-                    console.log("json",functionObject)
-                    var callbackData = await handleFunctionCall(functionObject?.call_function?.name,functionObject?.call_function?.params,files,[functionObject?.extra_message,additionalMessage]?.filter(e=>e)?.join('. '))
-                    callback(callbackData)
-                }catch{
-    
-                }
-                return {
-                    content: 'Oops! Our function executor miss the point 🙇‍♂️',
-                    actions : []
-                }
-            }
+        // console.log("Run function step 1",jsonObject)
+        if(jsonObject){
+            jsonString = jsonObject[1]
+            additionalMessage = jsonObject[2]?.trim();
+            // console.log("Run function step 2",jsonString,additionalMessage)
         }
     }
-    console.log("json","FAILED")
-    return {
+    if(cleanedInput?.startsWith("{")){
+        jsonObject = cleanedInput.match(/{(?:[^{}]|(\{(?:[^{}]|\{[^{}]*\})*\}))*}/);
+        // console.log("Run function step 1",jsonObject)
+        if(jsonObject){
+            jsonString = jsonObject[0]
+            additionalMessage = jsonObject[1]?.trim();
+            // console.log("Run function step 2",jsonString,additionalMessage)
+        }
+    }
+  
+  
+    if(jsonString){
+        try{
+            const functionObject = JSON.parse(jsonString) as {
+                call_function : {
+                    name : string,
+                    params : {
+                        name: string,
+                        value: any
+                    }[]
+                },
+                extra_message: string
+            }
+            // console.log("Run function step 3",functionObject)
+            var callbackData = await handleFunctionCall(functionObject?.call_function?.name,functionObject?.call_function?.params,files,[functionObject?.extra_message,additionalMessage]?.filter(e=>e)?.join('. '))
+            callback(callbackData)
+            return
+        }catch(e:any){
+            // console.log("Run function step -1",e)
+        }
+        callback( {
+            content: 'Oops! Our function executor miss the point 🙇‍♂️',
+            actions : []
+        })
+    }
+   
+    // console.log("json","FAILED")
+    callback( {
         content: 'Oops! Our function executor miss the point 🙇‍♂️',
         actions : []
-    }
+    })
 
 }
 
@@ -329,7 +341,7 @@ async function apply_style_transfer(contentImagePath: File, styleImagePath?: Fil
     }
 
     try {
-        const response = await axios.post('http://localhost:5000/style-transfer', formData, {
+        const response = await axios.post(`${IMAGE_PROCESSING_ENDPOINT}/style-transfer`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -425,30 +437,32 @@ async function generate_image_from_text(description: string) {
     // Implement function logic here
     
     try {
-        const response = await axios.post('http://127.0.0.1:7860/sdapi/v1/txt2img', {
+        const response = await axios.post(`${IMAGE_PROCESSING_ENDPOINT}/sdxl/text2img`, {
             "prompt": description,
             "steps": 5
+        },{
+            responseType: 'blob',
         });
+        const url = URL.createObjectURL(response.data);
+        // // Assuming the response data contains the base64-encoded image at 'images[0]'
+        // const base64Image = response.data.images[0];
+        // console.log("response.data.images",response.data.images?.length)
+        // // Convert the base64 string to a binary buffer
+        // const binaryString = atob(base64Image);
+        // const len = binaryString.length;
+        // const bytes = new Uint8Array(len);
+        // for (let i = 0; i < len; i++) {
+        //     bytes[i] = binaryString.charCodeAt(i);
+        // }
 
-        // Assuming the response data contains the base64-encoded image at 'images[0]'
-        const base64Image = response.data.images[0];
-        console.log("response.data.images",response.data.images?.length)
-        // Convert the base64 string to a binary buffer
-        const binaryString = atob(base64Image);
-        const len = binaryString.length;
-        const bytes = new Uint8Array(len);
-        for (let i = 0; i < len; i++) {
-            bytes[i] = binaryString.charCodeAt(i);
-        }
+        // // Create a Blob from the binary data
+        // const blob = new Blob([bytes.buffer], { type: 'image/png' });
 
-        // Create a Blob from the binary data
-        const blob = new Blob([bytes.buffer], { type: 'image/png' });
-
-        // Create a URL for the Blob
-        const imageUrl = URL.createObjectURL(blob);
+        // // Create a URL for the Blob
+        // const imageUrl = URL.createObjectURL(blob);
 
         return {
-            url: imageUrl,
+            url: url,
             success: true
         };
     } catch (error) {

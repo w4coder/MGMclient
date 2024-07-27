@@ -2,12 +2,11 @@ import  {useState, useRef, useEffect, ChangeEvent } from 'react';
 import './index.scss';
 import { generateFilePath, handleFunctionCallString } from './utils/utils';
 import { GaistAIMessage, GaistrAIMessageProps, MessageFile } from './components/gaist-ai-comp';
+import { TEXT_GEN_MODEL_API } from '@/constants';
 
 
 type Message = {text:string,files?:MessageFile[]}
 export default function GaistAI() {
-
-
 
     const [message, setMessage] = useState<Message>({
         text: '',
@@ -19,9 +18,9 @@ export default function GaistAI() {
             guest : "ai",
             content : `Hi, I'm LLM CLient by w4coder! I'm here to help you with any request you may have. To get you started, here are some templates you can use :`,
             actions : [
-                "Write a short story about a robot who discovers an ancient civilization on Mars.",
-                "In 3 sentences, explain how a blockchain works in simple terms.",
-                "Discuss the impact of the Industrial Revolution on urbanization and how it shaped modern cities."
+                "Who was the first president of the France, and in which year did he take office?",
+                "In simple terms, what does an API do, and why is it important in software development?",
+                "Describe the main function of mitochondria in a cell in two to three sentences."
             ]?.map((cr)=>{
                 
                 return {
@@ -41,6 +40,8 @@ export default function GaistAI() {
     const [isStreaming, setIsStreaming] = useState(false);
     const controllerRef = useRef<AbortController | null>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);  // Add a ref for the chat container
+
+    
     const runInference = async (message:string,files?:MessageFile[]) => {
         setIsStreaming(true);
 
@@ -52,7 +53,7 @@ export default function GaistAI() {
 
         try {
             // console.log("Start message", chatMessages)
-            const response = await fetch('http://localhost:1234/v1/chat/completions', {
+            const response = await fetch(`${TEXT_GEN_MODEL_API}/v1/chat/completions`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -73,7 +74,7 @@ export default function GaistAI() {
                         { 
                             "role": "system", 
                             "content": `
-                                Your are a question aswering agent with the ability to call a function when user request need it.
+                                Your are a question aswering agent with the ability to a function caller json when you are unable to answer user request.
                                 When the user request require to interract directly with files 
                                 or interract with elements or an action you can't perform 
                                 then you return a only a json object without any other text following this template: {
@@ -86,18 +87,8 @@ export default function GaistAI() {
                                 Functions available:
                                 1. apply_style_transfer(content_image_path: str, style_image_path: str) - Applies the artistic style from the style image to the content image.
                                 2. enhance_resolution(image_path: str, target_width: int, target_height: int) - Enhances the resolution of the given image to the specified target width and height.
-                                3. fill_missing_parts(image_path: str, mask_path: str) - Fills the missing or damaged parts of an image using the provided mask.
-                                4. generate_template(prompt: str) - Automatically generates template design elements based on the input parameters.
-                                5. synthesize_texture(sample_image_path: str, output_width: int, output_height: int) - Generates a seamless texture based on a small sample image, with the specified output width and height.
-                                6. colorize_photo(image_path: str) - Converts a black and white photo to a colorized version.
-                                7. edit_face(image_path: str, edits: dict) - Enhances or modifies facial features in the given image according to the specified edits (e.g., apply makeup, change expressions).
-                                8. remove_background(image_path: str, new_background_path: str = None) - Removes the background from the image and optionally replaces it with a new background.
-                                9. apply_artistic_filter(image_path: str, filter_type: str) - Applies an artistic filter to the image, such as watercolor, oil painting, or sketch.
-                                10. generate_3d_model(sketch_image_path: str) - Generates a 3D model from a 2D sketch image.
-                                11. interpolate_video_frames(video_path: str, target_frame_rate: int) - Smoothly interpolates between video frames to create slow-motion effects or increase the frame rate to the specified target frame rate.
-                                12. apply_video_style_transfer(video_path: str, style_image_path: str) - Applies a consistent artistic style from the style image to the entire video.
-                                13. generate_image_from_text(description: str) - Generates an image based on the provided textual description.
-                                14. default() - Default function if no option above matched.
+                                3. generate_image_from_text(description: str) - Generates an image based on the user request.
+                                4. default() - Default function if no option above matched.
                             ` 
                         },
                         
@@ -238,10 +229,6 @@ export default function GaistAI() {
 
     }
 
-    //Resize this image https://myimage.com/slug.png to 500x500
-
-    // console.log("End message", chatMessages)
-
     // console.log("Message", message)
 
     const handleSendMessage = async () => {
@@ -293,19 +280,6 @@ export default function GaistAI() {
             setIsStreaming(false);
         }
     };
-
-    // const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    //     const selectedFile = event.target.files?.[0];
-    //     if (selectedFile) {
-    //       setMessage((prev)=>{
-    //         return {
-    //             ...prev,
-    //             file : selectedFile
-    //         }
-    //       });
-    //       setPreviewUrl(URL.createObjectURL(selectedFile));
-    //     }
-    // };
 
     const handleRemoveFile = (id:string) => {
 
