@@ -30,7 +30,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/w4coder/MGMclient">
-    <img src="/logo.svg" alt="Logo" width="80" height="80">
+    <img src="/public/logo.svg" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">MGMclient</h3>
@@ -81,9 +81,13 @@
 
 
 <!-- ABOUT THE PROJECT -->
+
+https://github.com/user-attachments/assets/23a3b562-3a91-457e-ad0f-a47b8645a0e9
+
+
 ## About The Project
 
-[![MGMclient Demo Mobile][product-screenshot-mobile]][![MGMclient Demo Desktop][product-screenshot-desk]]
+
 
 This ReactJS LLM web UI application provides an interactive chat interface that streams responses from a Large Language Model (LLM). The application supports various LLM functions, allowing developers to seamlessly integrate multiple models and custom functions to enhance the chat experience. The current available functions include:
 
